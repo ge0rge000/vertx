@@ -1,35 +1,46 @@
 
 package helloworldapp;
 
+import io.vertx.core.Context;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
-
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.time.Duration;
-
+import io.temporal.client.ActivityCompletionClient;
+import io.temporal.activity.Activity;
+import io.temporal.activity.ActivityExecutionContext;
+import io.temporal.client.ActivityCompletionClient;
+import io.vertx.core.Vertx;
+import io.vertx.core.json.JsonObject;
+import java.util.concurrent.CompletableFuture;
+import io.vertx.ext.web.client.WebClient;
+import io.vertx.ext.web.client.predicate.ResponsePredicate;
+import io.vertx.ext.web.codec.BodyCodec;
 public class Apimpl implements Api {
+    private final ActivityCompletionClient completionClient;
 
-    @Override
+    Apimpl(ActivityCompletionClient completionClient) {
+        this.completionClient = completionClient;
+    }    @Override
+
     public String receiveApi(String currency) {
-        HttpClient client = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).build();
-        HttpResponse response=null;
-        try{
-            String endPoint="http://data.fixer.io/api/latest?access_key=e32dbc0bada6ce316c659ff029d0673d&format=1";
-            URI uri = URI.create(endPoint+"?foo=bar&foo2=bar2");
-            HttpRequest request =HttpRequest.newBuilder().uri(uri).build();
-            response=client.send(request,HttpResponse.BodyHandlers.ofString());
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        Object obj= JSONValue.parse((String) response.body());
-        JSONObject cuurrency = (JSONObject) obj;
+        ActivityExecutionContext context = Activity.getExecutionContext();
+        byte[] taskToken = context.getTaskToken();
+        Vertx vertx = Vertx.vertx();
+        WebClient client = WebClient.create(vertx);
+        client
+                .getAbs("http://data.fixer.io/api/latest?access_key=e32dbc0bada6ce316c659ff029d0673d&format=1")
+                .as(BodyCodec.jsonObject())
+                .send()
+                .onSuccess(res -> {
+                    JsonObject body = res.body();
+                    JsonObject rates =body.getJsonObject("rates");
+                    String result = "USD"+rates.getString("USD");
+                    completionClient.complete(taskToken, result);
+                })
+                .onFailure(err ->
+                        System.out.println("Something went wrong " + err.getMessage()));
+        context.doNotCompleteOnReturn();
+        return "ignored";
 
-        JSONObject ratess = (JSONObject) cuurrency.get("rates");
-
-        return  "EGP:"+ratess.get("EGP")+"  USD:"+ratess.get("USD");
     }
 }
 
