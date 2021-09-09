@@ -21,6 +21,6 @@ public class HelloWorldWorkflowImpl implements HelloWorldWorkflow {
     public String getGreeting(String name) {
       
 
-        return currency.receiveApi(name);
+        return activities.composeActivity("Hello", name);
 }
 }

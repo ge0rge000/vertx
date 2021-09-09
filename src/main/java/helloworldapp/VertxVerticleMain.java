@@ -6,7 +6,7 @@ import io.vertx.core.Launcher;
 import io.vertx.core.Vertx;
 import helloworldapp.InitiateHelloWorld;
 import helloworldapp.HelloWorldWorker;
-public class VertxVerticleMain  {
+public class VertxVerticleMain {
 
     public static void main(String[] args) {
         Vertx vertx = Vertx.vertx();
