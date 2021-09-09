@@ -24,8 +24,7 @@ public class InitiateHelloWorld extends AbstractVerticle {
         // Synchronously execute the Workflow and wait for the response.
         CompletableFuture<String> greeting = WorkflowClient.execute(workflow::getGreeting, "World");
        System.out.println(greeting.get());
-//        String greeting = workflow.getGreeting("World");
-//        System.out.println(greeting);
+
         System.exit(0);
     }
 }
