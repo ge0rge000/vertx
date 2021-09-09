@@ -7,6 +7,6 @@ public class VertxVerticleMain  {
     public static void main(String[] args) {
         Vertx vertx = Vertx.vertx();
         vertx.deployVerticle(new HelloWorldWorker());
-        vertx.deployVerticle(new InitiateHelloWorld());
+        vertx.deployVerticle(new InitiateHelloWorldVerticle());
     }
 }
