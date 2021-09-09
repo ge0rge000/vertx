@@ -23,7 +23,7 @@ public class HelloWorldWorker extends AbstractVerticle   {
         worker.registerWorkflowImplementationTypes(HelloWorldWorkflowImpl.class);
         // Activities are stateless and thread safe, so a shared instance is used.
         ActivityCompletionClient completionClient = client.newActivityCompletionClient();
-        worker.registerActivitiesImplementations(new FormatImpl(),new Apimpl(completionClient),new GreetingActivitiesImpl(completionClient));
+        worker.registerActivitiesImplementations(new FormatImpl(),new Apimpl(),new GreetingActivitiesImpl(completionClient));
 
         // Start polling the Task Queue.
         factory.start();
