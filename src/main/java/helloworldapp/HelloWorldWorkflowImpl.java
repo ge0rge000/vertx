@@ -12,9 +12,8 @@ public class HelloWorldWorkflowImpl implements HelloWorldWorkflow {
             .build();
 
     // ActivityStubs enable calls to Activities as if they are local methods, but actually perform an RPC.
-  
-    private final Api currency=Workflow.newActivityStub(Api.class,options);
 
+    private final Api currency=Workflow.newActivityStub(Api.class,options);
 
     @Override
     public String getGreeting(String name) {
