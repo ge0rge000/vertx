@@ -5,8 +5,8 @@ package helloworldapp;
         import io.temporal.activity.ActivityMethod;
 
 @ActivityInterface
-public interface Api {
-
+public interface PostApi {
+    String convert = "";
     @ActivityMethod
-    String receiveApi(String currency,Integer price);
+    String postApi();
 }

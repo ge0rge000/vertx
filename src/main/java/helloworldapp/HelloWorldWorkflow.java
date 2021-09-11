@@ -7,6 +7,6 @@ import io.temporal.workflow.WorkflowMethod;
 public interface HelloWorldWorkflow {
 
     @WorkflowMethod
-    String getGreeting(String name);
+    String getGreeting(String name,Integer price);
 
 }

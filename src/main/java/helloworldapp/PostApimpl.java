@@ -2,6 +2,10 @@
 package helloworldapp;
 
 import io.vertx.core.Context;
+import io.vertx.core.buffer.Buffer;
+import io.vertx.core.http.HttpServer;
+import io.vertx.core.http.HttpServerResponse;
+import io.vertx.ext.web.Router;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import io.temporal.client.ActivityCompletionClient;
@@ -14,27 +18,30 @@ import java.util.concurrent.CompletableFuture;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.client.predicate.ResponsePredicate;
 import io.vertx.ext.web.codec.BodyCodec;
-public class Apimpl implements Api {
+public class PostApimpl implements PostApi  {
+   static String convert;
     private final ActivityCompletionClient completionClient;
 
-    Apimpl(ActivityCompletionClient completionClient) {
+    PostApimpl(ActivityCompletionClient completionClient) {
         this.completionClient = completionClient;
-    }    @Override
-
-    public String receiveApi(String currency,Integer price) {
+    }
+        @Override
+    public String postApi(){
         ActivityExecutionContext context = Activity.getExecutionContext();
         byte[] taskToken = context.getTaskToken();
         Vertx vertx = Vertx.vertx();
         WebClient client = WebClient.create(vertx);
+
         client
-                .getAbs("http://data.fixer.io/api/latest?access_key=e32dbc0bada6ce316c659ff029d0673d&format=1")
-                .as(BodyCodec.jsonObject())
-                .send()
+                .post(8080, "localhost", "/currency/15/USD/EGP")
+                .sendJsonObject(
+                        new JsonObject()
+                                .put("type", "Dale")
+                )
                 .onSuccess(res -> {
-                    JsonObject body = res.body();
-                    JsonObject rates =body.getJsonObject("rates");
-                    String result = "USD"+rates.getString("USD");
-                    completionClient.complete(taskToken, result);
+                    this.convert= String.valueOf(res.body());
+                    completionClient.complete(taskToken,  convert);
+
                 })
                 .onFailure(err ->
                         System.out.println("Something went wrong " + err.getMessage()));
@@ -42,5 +49,7 @@ public class Apimpl implements Api {
         return "ignored";
 
     }
+
+
 }
 
