@@ -22,7 +22,7 @@ public class InitiateHelloWorldVerticle extends AbstractVerticle {
         // WorkflowStubs enable calls to methods as if the Workflow object is local, but actually perform an RPC.
         HelloWorldWorkflow workflow = client.newWorkflowStub(HelloWorldWorkflow.class, options);
         // Synchronously execute the Workflow and wait for the response.
-        CompletableFuture<String> greeting = WorkflowClient.execute(workflow::getGreeting, "EGP",15);
+        CompletableFuture<String> greeting = WorkflowClient.execute(workflow::getGreeting, "EGP","USD",15);
        System.out.println(greeting.get());
 
         System.exit(0);

@@ -8,7 +8,7 @@ import io.vertx.core.http.HttpServer;
 import io.vertx.ext.web.Router;
 
 public class post_Vertx  {
-    public static String type="USD";
+
     public static void main(String[] args) {
         Vertx vertx = Vertx.vertx();
         HttpServer server = vertx.createHttpServer();
@@ -20,7 +20,7 @@ public class post_Vertx  {
                     String maincurrency = ctx.pathParam("maincurrency");
                     String convert_to = ctx.pathParam("convert_to");
 
-                    ctx.end(convert_to);
+                    ctx.end(money+","+maincurrency+","+convert_to);
                 });
         server.requestHandler(router).listen(8080);
 

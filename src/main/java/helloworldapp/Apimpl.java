@@ -21,7 +21,7 @@ public class Apimpl implements Api {
         this.completionClient = completionClient;
     }    @Override
 
-    public String receiveApi(String currency,Integer price) {
+    public String receiveApi(String currency,String currency_main,Integer price) {
         ActivityExecutionContext context = Activity.getExecutionContext();
         byte[] taskToken = context.getTaskToken();
         Vertx vertx = Vertx.vertx();
@@ -33,7 +33,7 @@ public class Apimpl implements Api {
                 .onSuccess(res -> {
                     JsonObject body = res.body();
                     JsonObject rates =body.getJsonObject("rates");
-                    String result = "USD"+rates.getString("USD");
+    String result = "money: "+price+" currencymain :"+currency_main+" converted to :" +currency +" result: "+(rates.getInteger(currency))*price;;
                     completionClient.complete(taskToken, result);
                 })
                 .onFailure(err ->

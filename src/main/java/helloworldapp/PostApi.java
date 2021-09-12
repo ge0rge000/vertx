@@ -6,7 +6,7 @@ package helloworldapp;
 
 @ActivityInterface
 public interface PostApi {
-    String convert = "";
+
     @ActivityMethod
     String postApi();
 }

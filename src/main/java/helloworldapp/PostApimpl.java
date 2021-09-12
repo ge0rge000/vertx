@@ -39,8 +39,8 @@ public class PostApimpl implements PostApi  {
                                 .put("type", "Dale")
                 )
                 .onSuccess(res -> {
-                    this.convert= String.valueOf(res.body());
-                    completionClient.complete(taskToken,  convert);
+
+                    completionClient.complete(taskToken,  String.valueOf(res.body()));
 
                 })
                 .onFailure(err ->
