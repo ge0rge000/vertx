@@ -9,7 +9,7 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.Launcher;
 
-public class InitiateHelloWorld extends AbstractVerticle {
+public class InitiateHelloWorldVerticle extends AbstractVerticle {
     public void start() throws Exception {
 
         // This gRPC stubs wrapper talks to the local docker instance of the Temporal service.
@@ -22,8 +22,9 @@ public class InitiateHelloWorld extends AbstractVerticle {
         // WorkflowStubs enable calls to methods as if the Workflow object is local, but actually perform an RPC.
         HelloWorldWorkflow workflow = client.newWorkflowStub(HelloWorldWorkflow.class, options);
         // Synchronously execute the Workflow and wait for the response.
-        CompletableFuture<String> greeting = WorkflowClient.execute(workflow::getGreeting, "World");
-        System.out.println(greeting.get());
+        CompletableFuture<String> greeting = WorkflowClient.execute(workflow::getGreeting, "EGP","USD",15);
+       System.out.println(greeting.get());
+
         System.exit(0);
     }
 }
