@@ -1,6 +1,7 @@
 
 package helloworldapp;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.vertx.core.Context;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpServer;
@@ -26,14 +27,14 @@ public class PostApimpl implements PostApi  {
         this.completionClient = completionClient;
     }
         @Override
-    public String postApi(){
+    public String postApi(String currency,String currency_main,Integer price){
         ActivityExecutionContext context = Activity.getExecutionContext();
         byte[] taskToken = context.getTaskToken();
         Vertx vertx = Vertx.vertx();
         WebClient client = WebClient.create(vertx);
 
         client
-                .post(8080, "localhost", "/currency/15/USD/EGP")
+                .post(8080, "localhost", "/currency/"+price+"/"+currency_main+"/"+currency)
                 .sendJsonObject(
                         new JsonObject()
                                 .put("type", "Dale")

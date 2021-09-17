@@ -8,5 +8,5 @@ package helloworldapp;
 public interface PostApi {
 
     @ActivityMethod
-    String postApi();
+    String postApi(String currency,String currency_main,Integer price);
 }

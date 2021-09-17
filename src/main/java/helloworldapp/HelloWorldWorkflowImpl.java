@@ -20,7 +20,7 @@ public class HelloWorldWorkflowImpl implements HelloWorldWorkflow {
 
     @Override
     public String getGreeting(String name,String country_main,Integer price) {
-        String body=currency_get.postApi();
+        String body=currency_get.postApi(name,country_main,price);
         String parts []=body.split(",",3);
 
         return currency.receiveApi(parts[2],parts[1],Integer.parseInt(parts[0]));

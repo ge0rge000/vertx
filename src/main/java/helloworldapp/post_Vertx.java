@@ -1,5 +1,7 @@
 package helloworldapp;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
@@ -7,9 +9,9 @@ import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.ext.web.Router;
 
-public class post_Vertx  {
+public class post_Vertx extends AbstractVerticle  {
 
-    public static void main(String[] args) {
+    public void start() throws Exception {
         Vertx vertx = Vertx.vertx();
         HttpServer server = vertx.createHttpServer();
         Router router = Router.router(vertx);
