@@ -22,12 +22,12 @@ import java.lang.reflect.Array;
 public class Apimpl   extends vertxAbstract implements Api  {
     private final ActivityCompletionClient completionClient;
 
-    Apimpl(ActivityCompletionClient completionClient) {
-
+    public Apimpl(Vertx vertx,ActivityCompletionClient completionClient  ) {
+        super(vertx);
         this.completionClient = completionClient;
     }
-    @Override
 
+    @Override
     public String receiveApi(String currency,String currency_main,Integer price) {
         ActivityExecutionContext context = Activity.getExecutionContext();
         byte[] taskToken = context.getTaskToken();

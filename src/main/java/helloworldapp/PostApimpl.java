@@ -19,18 +19,19 @@ import java.util.concurrent.CompletableFuture;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.client.predicate.ResponsePredicate;
 import io.vertx.ext.web.codec.BodyCodec;
-public class PostApimpl   implements PostApi  {
+public class PostApimpl   extends vertxAbstract implements PostApi  {
    static String convert;
     private final ActivityCompletionClient completionClient;
 
-    PostApimpl(ActivityCompletionClient completionClient) {
+    PostApimpl(Vertx vertx, ActivityCompletionClient completionClient) {
+        super(vertx);
         this.completionClient = completionClient;
     }
         @Override
     public String postApi(String currency,String currency_main,Integer price){
         ActivityExecutionContext context = Activity.getExecutionContext();
         byte[] taskToken = context.getTaskToken();
-            Vertx vertx = Vertx.vertx();
+
         WebClient client = WebClient.create(vertx);
 
         client
