@@ -22,12 +22,16 @@ import java.lang.reflect.Array;
 public class Apimpl   extends vertxAbstract implements Api  {
     private final ActivityCompletionClient completionClient;
 
-    public Apimpl(Vertx vertx,ActivityCompletionClient completionClient  ) {
-        setVertx(vertx);
+
+    public Apimpl( ActivityCompletionClient completionClient  ) {
         this.completionClient = completionClient;
     }
-
     @Override
+
+    public vertxAbstract setVertx(Vertx vertx) {
+        this.vertx=vertx;
+        return this;
+    }
     public String receiveApi(String currency,String currency_main,Integer price) {
         ActivityExecutionContext context = Activity.getExecutionContext();
         byte[] taskToken = context.getTaskToken();
@@ -57,6 +61,8 @@ public class Apimpl   extends vertxAbstract implements Api  {
         return "ignored";
 
     }
+
+
 
 }
 

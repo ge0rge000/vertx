@@ -21,13 +21,18 @@ import io.vertx.ext.web.client.predicate.ResponsePredicate;
 import io.vertx.ext.web.codec.BodyCodec;
 public class PostApimpl   extends vertxAbstract implements PostApi  {
    static String convert;
-    private final ActivityCompletionClient completionClient;
 
-    PostApimpl(Vertx vertx, ActivityCompletionClient completionClient) {
-        setVertx(vertx);
+    private final ActivityCompletionClient completionClient;
+    PostApimpl( ActivityCompletionClient completionClient) {
+
         this.completionClient = completionClient;
+
     }
-        @Override
+    @Override
+    public vertxAbstract setVertx(Vertx vertx) {
+        this.vertx=vertx;
+        return this;
+    }
     public String postApi(String currency,String currency_main,Integer price){
         ActivityExecutionContext context = Activity.getExecutionContext();
         byte[] taskToken = context.getTaskToken();
@@ -51,6 +56,7 @@ public class PostApimpl   extends vertxAbstract implements PostApi  {
         return "ignored";
 
     }
+
 
 
 }
