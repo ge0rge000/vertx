@@ -24,7 +24,7 @@ public class PostApimpl   extends vertxAbstract implements PostApi  {
     private final ActivityCompletionClient completionClient;
 
     PostApimpl(Vertx vertx, ActivityCompletionClient completionClient) {
-        super(vertx);
+        setVertx(vertx);
         this.completionClient = completionClient;
     }
         @Override

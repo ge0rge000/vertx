@@ -23,7 +23,7 @@ public class Apimpl   extends vertxAbstract implements Api  {
     private final ActivityCompletionClient completionClient;
 
     public Apimpl(Vertx vertx,ActivityCompletionClient completionClient  ) {
-        super(vertx);
+        setVertx(vertx);
         this.completionClient = completionClient;
     }
 
