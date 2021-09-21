@@ -9,10 +9,8 @@ import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.ext.web.Router;
 
-public class post_Vertx extends AbstractVerticle  {
-
+public class sendCurrencyVerticle  extends AbstractVerticle {
     public void start() throws Exception {
-        Vertx vertx = Vertx.vertx();
         HttpServer server = vertx.createHttpServer();
         Router router = Router.router(vertx);
         router

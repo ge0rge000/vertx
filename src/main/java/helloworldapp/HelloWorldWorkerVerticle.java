@@ -9,7 +9,7 @@ import io.temporal.client.ActivityCompletionClient;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.Launcher;
-public class HelloWorldWorker extends AbstractVerticle   {
+public class HelloWorldWorkerVerticle extends AbstractVerticle   {
     public void start() throws Exception {
 
         // This gRPC stubs wrapper talks to the local docker instance of the Temporal service.

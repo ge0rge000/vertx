@@ -4,11 +4,10 @@ import io.vertx.core.Vertx;
 
 public class VertxVerticleMain  {
 
-    public static void main(String[] args) {
+    public static void main(String[] args)  {
         Vertx vertx = Vertx.vertx();
-        vertx.deployVerticle(new post_Vertx());
-
-        vertx.deployVerticle(new HelloWorldWorker());
+        vertx.deployVerticle(new sendCurrencyVerticle());
+        vertx.deployVerticle(new HelloWorldWorkerVerticle());
         vertx.deployVerticle(new InitiateHelloWorldVerticle());
     }
 }
