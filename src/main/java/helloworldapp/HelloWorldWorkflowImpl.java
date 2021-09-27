@@ -16,13 +16,10 @@ public class HelloWorldWorkflowImpl implements HelloWorldWorkflow {
 
     private final Api currency=Workflow.newActivityStub(Api.class,options);
 
-    private final PostApi currency_get =Workflow.newActivityStub(PostApi.class,options);
 
     @Override
-    public String getGreeting(String name,String country_main,Integer price) {
-        String body=currency_get.postApi(name,country_main,price);
-        String parts []=body.split(",",3);
+    public String getGreeting(String name,String country_main,String price) {
 
-        return currency.receiveApi(parts[2],parts[1],Integer.parseInt(parts[0]));
+        return currency.receiveApi(name,country_main,price);
     }
 }

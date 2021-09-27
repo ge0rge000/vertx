@@ -1,15 +1,30 @@
 package helloworldapp;
 
-import io.vertx.core.DeploymentOptions;
-import io.vertx.core.Vertx;
+ import io.vertx.core.CompositeFuture;
+ import io.vertx.core.DeploymentOptions;
 
-public class VertxVerticleMain  {
+ import io.vertx.core.Vertx;
+ import io.vertx.core.eventbus.EventBus;
+ import io.vertx.core.eventbus.MessageConsumer;
 
-    public static void main(String[] args)  {
-
+public class VertxVerticleMain     {
+    public static void main(String[] args) throws InterruptedException {
         Vertx vertx = Vertx.vertx();
-        vertx.deployVerticle(new sendCurrencyVerticle());
-        vertx.deployVerticle(new HelloWorldWorkerVerticle());
-        vertx.deployVerticle(new InitiateHelloWorldVerticle());
+        DeploymentOptions options = new DeploymentOptions().setWorker(true);
+
+        CompositeFuture.all(vertx.deployVerticle(new sendCurrencyVerticle(),options),
+         vertx.deployVerticle(new HelloWorldWorkerVerticle(),options), vertx.deployVerticle(new InitiateHelloWorldVerticle(),options)
+
+        ).onComplete(ar -> {
+            if (ar.succeeded()) {
+                System.out.println("success");
+            } else {
+                System.out.println("failed");
+            }
+        });
+
+
+
     }
 }
+

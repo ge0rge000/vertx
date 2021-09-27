@@ -30,8 +30,8 @@ public class HelloWorldWorkerVerticle extends AbstractVerticle   {
         ActivityCompletionClient completionClient = client.newActivityCompletionClient();
 
         worker.registerActivitiesImplementations( new FormatImpl()
-                , new Apimpl( completionClient).setVertx(vertx), new GreetingActivitiesImpl(completionClient),
-                new PostApimpl(completionClient ).setVertx(vertx));
+                , new Apimpl( completionClient).setVertx(vertx), new GreetingActivitiesImpl(completionClient)
+                );
 
         // Start polling the Task Queue.
         factory.start();

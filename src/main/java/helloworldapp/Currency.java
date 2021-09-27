@@ -10,9 +10,11 @@ public class Currency {
     public Currency(lastConvert result) {
         this.result = result;
     }
+
     public Currency() {
-        super();
+
     }
+
     public void setResult(lastConvert result) {
         this.result = result;
     }

@@ -32,26 +32,26 @@ public class Apimpl   extends vertxAbstract implements Api  {
         this.vertx=vertx;
         return this;
     }
-    public String receiveApi(String currency,String currency_main,Integer price) {
+    public String receiveApi(String currency,String currency_main,String price) {
         ActivityExecutionContext context = Activity.getExecutionContext();
         byte[] taskToken = context.getTaskToken();
 
         WebClient client = WebClient.create(vertx);
         client
-                .getAbs("https://api.fastforex.io/convert?from="+currency_main+"&to="+currency+"&amount="+price+"&api_key=55ad5b93c3-931f13c204-qzknj8")
+                .getAbs("https://api.fastforex.io/convert?from="+
+                        currency_main+"&to="+currency+"&amount="+price+"&api_key=5c0423eb71-18eb217b67-r03d4a")
                 .as(BodyCodec.jsonObject())
                 .send()
                 .onSuccess(res -> {
-
-                        String body = res.body().toString();
-                        ObjectMapper objectMapper = new ObjectMapper();
+                    String body = res.body().toString();
+                    ObjectMapper objectMapper = new ObjectMapper();
                     try {
                         Currency currency_get = objectMapper.readValue(body, Currency.class);
-
                         completionClient.complete(taskToken,currency_get.getResult().getEGP());
                     } catch (JsonProcessingException e) {
                         e.printStackTrace();
                     }
+
                     //     String result = "money: "+price+" currencymain :"+currency_main+" converted to :" +currency +
                     //  " result: "+(currency_get.money)*price;
                 })

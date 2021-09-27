@@ -20,14 +20,17 @@ public class lastConvert {
     }
 
     public void setEGP(float EGP) {
+
         this.EGP = EGP;
     }
 
     public float getRate() {
+
         return rate;
     }
 
-    public void setRate(float rate) {
+    public void setRate(float rate)
+    {
         this.rate = rate;
     }
 }
