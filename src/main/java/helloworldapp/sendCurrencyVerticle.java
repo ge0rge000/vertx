@@ -12,6 +12,9 @@ import io.vertx.core.http.HttpServer;
 import io.vertx.ext.web.Router;
 
 public class sendCurrencyVerticle  extends AbstractVerticle {
+
+
+
     public void start() throws Exception {
         HttpServer server = vertx.createHttpServer();
         Router router = Router.router(vertx);
@@ -22,9 +25,10 @@ public class sendCurrencyVerticle  extends AbstractVerticle {
                     String money = ctx.pathParam("money");
                     String maincurrency = ctx.pathParam("maincurrency");
                     String convert_to = ctx.pathParam("convert_to");
-
+                    vertx.eventBus().registerDefaultCodec(Convertor.class,
+                            new GenericCodec<Convertor>(Convertor.class));
                     eventBus.publish
-                            ("news.uk.sport",(money+','+maincurrency+','+convert_to));
+                            ("news.uk.sport", new Convertor(money,maincurrency,convert_to));
                     ctx.end(money+","+maincurrency+","+convert_to);
                 });
                   server.requestHandler(router).listen(8080);

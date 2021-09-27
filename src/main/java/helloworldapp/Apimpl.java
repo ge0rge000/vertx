@@ -47,7 +47,21 @@ public class Apimpl   extends vertxAbstract implements Api  {
                     ObjectMapper objectMapper = new ObjectMapper();
                     try {
                         Currency currency_get = objectMapper.readValue(body, Currency.class);
-                        completionClient.complete(taskToken,currency_get.getResult().getEGP());
+
+
+                        if(currency_get.getResult().getEGP()==0.0 && currency_get.getResult().getEUR()==0.0){
+                            completionClient.complete(taskToken,currency_get.getResult().getUSD());
+                            System.out.println("1");
+                        }else if(currency_get.getResult().getUSD()==0.0 && currency_get.getResult().getEUR()==0.0){
+                            completionClient.complete(taskToken,currency_get.getResult().getEGP());
+                            System.out.println("2");
+
+                        }
+                        else if(currency_get.getResult().getEGP()==0.0 && currency_get.getResult().getUSD()==0.0){
+                            completionClient.complete(taskToken,currency_get.getResult().getEUR());
+                            System.out.println("3");
+
+                        }
                     } catch (JsonProcessingException e) {
                         e.printStackTrace();
                     }

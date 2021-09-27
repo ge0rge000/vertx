@@ -20,11 +20,12 @@ public class InitiateHelloWorldVerticle extends AbstractVerticle {
         HelloWorldWorkflow workflow = client.newWorkflowStub(HelloWorldWorkflow.class, options);
         // Synchronously execute the Workflow and wait for the response.
         EventBus eb = vertx.eventBus();
-        eb.consumer("news.uk.sport", message -> {
-            String[] results = message.body().toString().split(",",3);
+        eb.consumer("news.uk.sport", context  -> {
+
+            Convertor msg = (Convertor) context.body();
 
             CompletableFuture<String> greeting =
-                    WorkflowClient.execute(workflow::getGreeting,results[2],results[1],results[0]);
+                    WorkflowClient.execute(workflow::getGreeting,msg.convertedCurrency,msg.mainCurrency,msg.money);
 
         });
 
