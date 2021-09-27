@@ -1,40 +1,73 @@
 
 package helloworldapp;
 
-import io.vertx.core.Context;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.temporal.client.ActivityCompletionClient;
 import io.temporal.activity.Activity;
 import io.temporal.activity.ActivityExecutionContext;
-import io.temporal.client.ActivityCompletionClient;
+
 import io.vertx.core.Vertx;
+
 import io.vertx.core.json.JsonObject;
-import java.util.concurrent.CompletableFuture;
 import io.vertx.ext.web.client.WebClient;
-import io.vertx.ext.web.client.predicate.ResponsePredicate;
+
 import io.vertx.ext.web.codec.BodyCodec;
-public class Apimpl implements Api {
+import org.json.simple.JSONArray;
+
+import java.lang.reflect.Array;
+
+public class Apimpl   extends vertxAbstract implements Api  {
     private final ActivityCompletionClient completionClient;
 
-    Apimpl(ActivityCompletionClient completionClient) {
-        this.completionClient = completionClient;
-    }    @Override
 
-    public String receiveApi(String currency,String currency_main,Integer price) {
+    public Apimpl( ActivityCompletionClient completionClient  ) {
+        this.completionClient = completionClient;
+    }
+    @Override
+
+    public vertxAbstract setVertx(Vertx vertx) {
+        this.vertx=vertx;
+        return this;
+    }
+    public String receiveApi(String currency,String currency_main,String price) {
         ActivityExecutionContext context = Activity.getExecutionContext();
         byte[] taskToken = context.getTaskToken();
-        Vertx vertx = Vertx.vertx();
+
         WebClient client = WebClient.create(vertx);
         client
-                .getAbs("http://data.fixer.io/api/latest?access_key=e32dbc0bada6ce316c659ff029d0673d&format=1")
+                .getAbs("https://api.fastforex.io/convert?from="+
+                        currency_main+"&to="+currency+"&amount="+price+"&api_key=5c0423eb71-18eb217b67-r03d4a")
                 .as(BodyCodec.jsonObject())
                 .send()
                 .onSuccess(res -> {
-                    JsonObject body = res.body();
-                    JsonObject rates =body.getJsonObject("rates");
-    String result = "money: "+price+" currencymain :"+currency_main+" converted to :" +currency +" result: "+(rates.getInteger(currency))*price;;
-                    completionClient.complete(taskToken, result);
+                    String body = res.body().toString();
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    try {
+                        Currency currency_get = objectMapper.readValue(body, Currency.class);
+
+
+                        if(currency_get.getResult().getEGP()==0.0 && currency_get.getResult().getEUR()==0.0){
+                            completionClient.complete(taskToken,currency_get.getResult().getUSD());
+                            System.out.println("1");
+                        }else if(currency_get.getResult().getUSD()==0.0 && currency_get.getResult().getEUR()==0.0){
+                            completionClient.complete(taskToken,currency_get.getResult().getEGP());
+                            System.out.println("2");
+
+                        }
+                        else if(currency_get.getResult().getEGP()==0.0 && currency_get.getResult().getUSD()==0.0){
+                            completionClient.complete(taskToken,currency_get.getResult().getEUR());
+                            System.out.println("3");
+
+                        }
+                    } catch (JsonProcessingException e) {
+                        e.printStackTrace();
+                    }
+
+                    //     String result = "money: "+price+" currencymain :"+currency_main+" converted to :" +currency +
+                    //  " result: "+(currency_get.money)*price;
                 })
                 .onFailure(err ->
                         System.out.println("Something went wrong " + err.getMessage()));
@@ -42,5 +75,8 @@ public class Apimpl implements Api {
         return "ignored";
 
     }
+
+
+
 }
 

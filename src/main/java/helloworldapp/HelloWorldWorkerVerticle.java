@@ -7,10 +7,15 @@ import io.temporal.worker.WorkerFactory;
 import io.temporal.client.ActivityCompletionClient;
 
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.Promise;
-import io.vertx.core.Launcher;
-public class HelloWorldWorker extends AbstractVerticle   {
+
+import io.vertx.core.Vertx;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+public class HelloWorldWorkerVerticle extends AbstractVerticle   {
     public void start() throws Exception {
+
 
         // This gRPC stubs wrapper talks to the local docker instance of the Temporal service.
         WorkflowServiceStubs service = WorkflowServiceStubs.newInstance();
@@ -23,7 +28,10 @@ public class HelloWorldWorker extends AbstractVerticle   {
         worker.registerWorkflowImplementationTypes(HelloWorldWorkflowImpl.class);
         // Activities are stateless and thread safe, so a shared instance is used.
         ActivityCompletionClient completionClient = client.newActivityCompletionClient();
-        worker.registerActivitiesImplementations(new FormatImpl(),new Apimpl(completionClient),new GreetingActivitiesImpl(completionClient),new PostApimpl(completionClient));
+
+        worker.registerActivitiesImplementations( new FormatImpl()
+                , new Apimpl( completionClient).setVertx(vertx), new GreetingActivitiesImpl(completionClient)
+                );
 
         // Start polling the Task Queue.
         factory.start();

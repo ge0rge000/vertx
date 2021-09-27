@@ -4,11 +4,8 @@ import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowOptions;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import java.util.concurrent.CompletableFuture;
-
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.Promise;
-import io.vertx.core.Launcher;
-
+import io.vertx.core.eventbus.EventBus;
 public class InitiateHelloWorldVerticle extends AbstractVerticle {
     public void start() throws Exception {
 
@@ -22,9 +19,16 @@ public class InitiateHelloWorldVerticle extends AbstractVerticle {
         // WorkflowStubs enable calls to methods as if the Workflow object is local, but actually perform an RPC.
         HelloWorldWorkflow workflow = client.newWorkflowStub(HelloWorldWorkflow.class, options);
         // Synchronously execute the Workflow and wait for the response.
-        CompletableFuture<String> greeting = WorkflowClient.execute(workflow::getGreeting, "EGP","USD",15);
-       System.out.println(greeting.get());
+        EventBus eb = vertx.eventBus();
+        eb.consumer("news.uk.sport", context  -> {
 
-        System.exit(0);
+            Convertor msg = (Convertor) context.body();
+
+            CompletableFuture<String> greeting =
+                    WorkflowClient.execute(workflow::getGreeting,msg.convertedCurrency,msg.mainCurrency,msg.money);
+
+        });
+
+        //System.exit(0);
     }
 }
